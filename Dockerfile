@@ -11,7 +11,6 @@ COPY /server .
 
 FROM base AS build
 COPY /package.json .
-COPY /.npmrc .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm run build
