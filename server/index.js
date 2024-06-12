@@ -1,7 +1,9 @@
+import path from 'node:path'
 import http from 'node:http'
 import mqtt from 'mqtt'
 import WebSocket from 'ws'
 import express from 'express'
+import compression from 'compression'
 
 const client = mqtt.connect('mqtt://cwo.bg5atv.com:1883', {
   username: 'web',
@@ -9,6 +11,11 @@ const client = mqtt.connect('mqtt://cwo.bg5atv.com:1883', {
 })
 
 const app = express()
+app.disable('x-powered-by')
+app.use(compression())
+app.use(express.static('dist'))
+app.use((req, res) => res.sendFile(path.join(__dirname, 'dist/index.html')))
+
 const server = http.createServer(app)
 const wss = new WebSocket.Server({ server })
 
