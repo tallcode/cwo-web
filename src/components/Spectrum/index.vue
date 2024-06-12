@@ -7,7 +7,7 @@ import { useConfigStore } from '@/stores/config'
 
 const container = ref<HTMLDivElement>()
 const isInit = ref(false)
-const { mute } = storeToRefs(useConfigStore())
+const { mute, channel } = storeToRefs(useConfigStore())
 
 function init() {
   isInit.value = true
@@ -17,7 +17,14 @@ function init() {
       Spectrum(container.value, core)
       watch(mute, (value) => {
         core.mute(value)
-      }, { immediate: true })
+      }, {
+        immediate: true,
+      })
+      watch(channel, (value) => {
+        core.channel(value)
+      }, {
+        immediate: true,
+      })
     }
   })
 }

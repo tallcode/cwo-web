@@ -1,22 +1,31 @@
-import type Stream from '@/libs/stream'
-
-export default function (stream: ReturnType<typeof Stream>) {
+export default function () {
   const audioContext = new AudioContext()
-  const frequency = 600 // CW音频的频率（赫兹）
+  const frequency = 800 // CW音频的频率（赫兹）
 
   const gainNode = audioContext.createGain()
   gainNode.connect(audioContext.destination)
 
   gainNode.gain.setValueAtTime(1, audioContext.currentTime)
 
-  function playTone(duration: number) {
-    const oscillator = audioContext.createOscillator()
+  let oscillator: OscillatorNode | null = null
+
+  function playTone() {
+    if (oscillator) {
+      return
+    }
+    oscillator = audioContext.createOscillator()
     oscillator.connect(gainNode)
     oscillator.frequency.value = frequency
-    oscillator.type = 'sine'
+    oscillator.type = 'square'
     const startTime = audioContext.currentTime
     oscillator.start(startTime)
-    oscillator.stop(startTime + duration)
+  }
+
+  function stopTone() {
+    if (oscillator) {
+      oscillator.stop()
+      oscillator = null
+    }
   }
 
   function mute(enable: boolean) {
@@ -26,14 +35,9 @@ export default function (stream: ReturnType<typeof Stream>) {
       gainNode.gain.setValueAtTime(1, audioContext.currentTime)
   }
 
-  stream.on('fire', (data: number) => {
-    const duration = data - Date.now()
-    if (duration > 0)
-      playTone(duration / 1000)
-  })
-
   return {
     playTone,
+    stopTone,
     mute,
   }
 }
