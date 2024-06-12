@@ -1,5 +1,5 @@
 export default function useWebSocket(callback: (channel: number, stream: number[]) => void) {
-  const socket = new WebSocket('ws://localhost:8080')
+  const socket = new WebSocket('ws://cwo.bg5atv.com')
 
   // 当接收到 WebSocket 消息时
   socket.addEventListener('message', (event) => {
