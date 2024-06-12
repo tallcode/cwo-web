@@ -1,13 +1,24 @@
+import 'dotenv/config'
+import process from 'node:process'
 import path from 'node:path'
 import http from 'node:http'
+import https from 'node:https'
+import fs from 'node:fs'
 import mqtt from 'mqtt'
 import WebSocket from 'ws'
 import express from 'express'
 import compression from 'compression'
 
-const client = mqtt.connect('mqtt://cwo.bg5atv.com:1883', {
-  username: 'web',
-  password: '1111112',
+const MQTT_SERVER = process.env.MQTT_SERVER
+const MQTT_USERNAME = process.env.MQTT_USERNAME
+const MQTT_PASSWORD = process.env.MQTT_PASSWORD
+const SECURE = process.env.SECURE === 'TRUE'
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
+
+const client = mqtt.connect(MQTT_SERVER, {
+  username: MQTT_USERNAME,
+  password: MQTT_PASSWORD,
 })
 
 const app = express()
@@ -16,7 +27,12 @@ app.use(compression())
 app.use(express.static('dist'))
 app.use((req, res) => res.sendFile(path.join(__dirname, 'dist/index.html')))
 
-const server = http.createServer(app)
+const server = SECURE
+  ? https.createServer({
+    key: fs.readFileSync(path.join(__dirname, `cert/cwo.bg5atv.com.key`)),
+    cert: fs.readFileSync(path.join(__dirname, `cert/cwo.bg5atv.com.pem`)),
+  }, app)
+  : http.createServer(app)
 const wss = new WebSocket.Server({ server })
 
 client.on('connect', () => {
@@ -56,7 +72,17 @@ client.on('message', (topic, message) => {
   })
 })
 
-server.listen(8080, () => {
+const port = SECURE ? 8043 : 8080
+server.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log(`Server is listening on port 8080`)
+  console.log(`Server is listening on port ${port}`)
 })
+
+if (!SECURE) {
+  http.createServer((req, res) => {
+    res.writeHead(301, {
+      Location: `https://${req.headers.host}${req.url}`,
+    })
+    res.end()
+  }).listen(8080)
+}
