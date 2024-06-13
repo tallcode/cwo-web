@@ -8,7 +8,7 @@ import mqtt from 'mqtt'
 import WebSocket from 'ws'
 import express from 'express'
 import compression from 'compression'
-import emqx from './emqx.js'
+import * as emqx from './emqx.js'
 
 const MQTT_SERVER = process.env.MQTT_SERVER
 const MQTT_USERNAME = process.env.MQTT_USERNAME
