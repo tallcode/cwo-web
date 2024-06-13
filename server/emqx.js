@@ -24,5 +24,6 @@ export async function clients() {
 
 export async function count() {
   const result = await client.get('sessions_count')
-  return result.body
+  const count = Number.parseInt(result.body)
+  return Number.isNaN(count) ? 0 : count
 }
