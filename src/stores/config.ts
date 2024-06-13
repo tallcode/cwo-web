@@ -9,12 +9,12 @@ const storage = (() => {
       try {
         const result = Number.parseInt(store.getItem(key) || '')
         if (Number.isNaN(result))
-          return 7010
+          return 7015
         else
           return result
       }
       catch (e) {
-        return 7010
+        return 7015
       }
     },
     set(value: number) {

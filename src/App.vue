@@ -50,7 +50,7 @@ const drawer = ref(false)
       <v-btn grow readonly>
         {{ channel }}
       </v-btn>
-      <v-btn grow :disabled="channel === 7014" @click="channel = channel + 1">
+      <v-btn grow :disabled="channel === 7019" @click="channel = channel + 1">
         <v-icon>mdi-skip-next</v-icon>
       </v-btn>
     </v-bottom-navigation>

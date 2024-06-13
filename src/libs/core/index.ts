@@ -8,7 +8,7 @@ import Spectrum from '@/libs/spectrum'
 let stream: ReturnType<typeof Stream>
 let sound: ReturnType<typeof Sound>
 let spectrum: ReturnType<typeof Spectrum>
-let currentChannel: number = 7012
+let currentChannel: number = 7015
 
 export default function (container: HTMLDivElement) {
   stream = Stream()
