@@ -26,4 +26,12 @@ export default function useWebSocket(callback: (channel: number, stream: number[
     }, [])
     callback(channel, stream)
   })
+
+  socket.addEventListener('close', () => {
+    location.reload()
+  })
+
+  socket.addEventListener('error', () => {
+    location.reload()
+  })
 }
