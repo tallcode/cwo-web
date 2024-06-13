@@ -78,11 +78,14 @@ server.listen(port, () => {
   console.log(`Server is listening on port ${port}`)
 })
 
-if (!SECURE) {
+if (SECURE) {
   http.createServer((req, res) => {
     res.writeHead(301, {
       Location: `https://${req.headers.host}${req.url}`,
     })
     res.end()
-  }).listen(8080)
+  }).listen(8080, () => {
+    // eslint-disable-next-line no-console
+    console.log(`Server is listening on port 8080`)
+  })
 }
