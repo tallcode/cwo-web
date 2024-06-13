@@ -31,7 +31,7 @@ app.get('/api/client', async (req, res) => {
 })
 app.get('/api/count', async (req, res) => {
   const count = await emqx.count()
-  res.json(count)
+  res.json({ count })
 })
 app.use(express.static('dist'))
 app.use((req, res) => res.sendFile(path.join(__dirname, 'dist/index.html')))

@@ -1,26 +1,45 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import { useStatusStore } from './stores/status'
 import { useConfigStore } from '@/stores/config'
 import Spectrum from '@/components/Spectrum/index.vue'
 
 const { mute, channel } = storeToRefs(useConfigStore())
+const { count, clients } = storeToRefs(useStatusStore())
+const drawer = ref(false)
 </script>
 
 <template>
   <v-app>
     <v-app-bar :elevation="2">
-      <v-app-bar-title>CWO</v-app-bar-title>
-      <template #append>
-        <v-btn @click="mute = !mute">
-          <template v-if="!mute">
-            <v-icon>mdi-volume-off</v-icon>
-          </template>
-          <template v-else>
-            <v-icon>mdi-volume-high</v-icon>
-          </template>
-        </v-btn>
-      </template>
+      <v-app-bar-title>
+        CWO <span class="text-caption">BG5ATV's Server</span>
+      </v-app-bar-title>
+
+      <v-btn icon @click="drawer = true">
+        <v-badge :content="count" color="red-darken-3">
+          <v-icon>mdi-account-multiple-outline</v-icon>
+        </v-badge>
+      </v-btn>
+      <v-btn icon @click="mute = !mute">
+        <v-icon v-if="!mute">
+          mdi-volume-off
+        </v-icon>
+        <v-icon v-else>
+          mdi-volume-high
+        </v-icon>
+      </v-btn>
     </v-app-bar>
+    <v-navigation-drawer
+      v-model="drawer"
+      location="right"
+      temporary
+    >
+      <v-list
+        :items="clients"
+      />
+    </v-navigation-drawer>
     <v-main>
       <Spectrum />
     </v-main>
