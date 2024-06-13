@@ -23,6 +23,6 @@ export async function clients() {
 }
 
 export async function count() {
-  const result = await client.get('session_count')
+  const result = await client.get('sessions_count')
   return result.body
 }
