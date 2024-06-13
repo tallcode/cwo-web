@@ -8,6 +8,7 @@ import mqtt from 'mqtt'
 import WebSocket from 'ws'
 import express from 'express'
 import compression from 'compression'
+import emqx from './emqx.js'
 
 const MQTT_SERVER = process.env.MQTT_SERVER
 const MQTT_USERNAME = process.env.MQTT_USERNAME
@@ -24,6 +25,14 @@ const client = mqtt.connect(MQTT_SERVER, {
 const app = express()
 app.disable('x-powered-by')
 app.use(compression())
+app.get('/api/client', async (req, res) => {
+  const clients = await emqx.clients()
+  res.json(clients)
+})
+app.get('/api/count', async (req, res) => {
+  const count = await emqx.count()
+  res.json(count)
+})
 app.use(express.static('dist'))
 app.use((req, res) => res.sendFile(path.join(__dirname, 'dist/index.html')))
 
