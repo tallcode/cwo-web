@@ -3,7 +3,7 @@ import { EventEmitter } from 'events'
 
 export default function () {
   const ee = new EventEmitter()
-  const stream: number[] = []
+  const stream: Record<number, number[]> = {}
   let lastTime: number = 0
   const frame = (time: number) => {
     if (time - lastTime < 20) {
@@ -11,13 +11,18 @@ export default function () {
       return
     }
     lastTime = time
-    if (stream.length === 0) {
-      ee.emit('fire', 0)
-    }
-    else {
-      ee.emit('fire', stream[0])
-      stream.shift()
-    }
+    const enable: number[] = []
+    Object.keys(stream).forEach((channel) => {
+      const _channel = Number.parseInt(channel)
+      const _stream = stream[_channel]
+      if (_stream && _stream.length) {
+        if (_stream[0] === 1) {
+          enable.push(_channel)
+        }
+        _stream.shift()
+      }
+    })
+    ee.emit('fire', enable)
     requestAnimationFrame(frame)
   }
 
@@ -26,8 +31,12 @@ export default function () {
   return {
     on: ee.on.bind(ee),
     off: ee.off.bind(ee),
-    add: (data: number[]) => {
-      const rest = stream.slice(-2)
+    add: (channel: number, data: number[]) => {
+      if (!stream[channel]) {
+        stream[channel] = []
+      }
+      const _stream = stream[channel]
+      const rest = _stream.slice(-2)
       const test = [...rest, ...data]
       if (test.length > 2) {
         for (let i = 2; i < test.length; i++) {
@@ -39,7 +48,7 @@ export default function () {
           }
         }
       }
-      stream.push(...test.slice(rest.length))
+      _stream.push(...test.slice(rest.length))
     },
   }
 }

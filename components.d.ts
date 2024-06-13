@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Main: typeof import('./src/components/Main/index.vue')['default']
     Spectrum: typeof import('./src/components/Spectrum/index.vue')['default']
   }
 }

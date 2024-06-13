@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useStatusStore } from './stores/status'
 import { useConfigStore } from '@/stores/config'
-import Spectrum from '@/components/Spectrum/index.vue'
+import Main from '@/components/Main/index.vue'
 
 const { mute, channel } = storeToRefs(useConfigStore())
 const { count, clients } = storeToRefs(useStatusStore())
@@ -14,7 +14,7 @@ const drawer = ref(false)
   <v-app>
     <v-app-bar :elevation="2">
       <v-app-bar-title>
-        CWO <span class="text-caption">BG5ATV's Server</span>
+        CWO<span>&nbsp;&nbsp;</span><span class="text-caption">BG5ATV's Server</span>
       </v-app-bar-title>
 
       <v-btn icon @click="drawer = true">
@@ -41,7 +41,7 @@ const drawer = ref(false)
       />
     </v-navigation-drawer>
     <v-main>
-      <Spectrum />
+      <Main />
     </v-main>
     <v-bottom-navigation>
       <v-btn grow :disabled="channel === 7010" @click="channel = channel - 1">

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import Spectrum from './spectrum'
 import Core from '@/libs/core'
 import { useConfigStore } from '@/stores/config'
 
@@ -13,8 +12,7 @@ function init() {
   isInit.value = true
   nextTick(() => {
     if (container.value) {
-      const core = Core()
-      Spectrum(container.value, core)
+      const core = Core(container.value)
       watch(mute, (value) => {
         core.mute(value)
       }, {

@@ -51,6 +51,11 @@ client.on('connect', () => {
     'raw/7012',
     'raw/7013',
     'raw/7014',
+    'raw/7015',
+    'raw/7016',
+    'raw/7017',
+    'raw/7018',
+    'raw/7019',
   ]
   topics.forEach((topic) => {
     client.subscribe(topic, (err) => {

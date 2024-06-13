@@ -8,4 +8,4 @@ if [ -n "$container_exists" ]; then
     docker container rm ${container_name}
 fi    
 
-docker run --restart=always -p 80:8080 -p 443:8043 -v /app/.env:./.env -v /app/cert/:./cert/ --name ${container_name} -d ghcr.io/tallcode/${container_name}:latest
+docker run --restart=always -p 80:8080 -p 443:8043 -v /root/cwo-web/.env:/app/.env -v /root/cwo-web/cert:/app/cert --name ${container_name} -d ghcr.io/tallcode/${container_name}:latest

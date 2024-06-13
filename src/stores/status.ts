@@ -9,7 +9,7 @@ async function getCount() {
 
 async function getClient() {
   const response = await axios.get<string[]>('/api/client', { responseType: 'json' })
-  return response.data || []
+  return Array.isArray(response.data) ? response.data : []
 }
 
 export const useStatusStore = defineStore('status', () => {
