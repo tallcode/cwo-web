@@ -8,7 +8,7 @@ import WebSocket from 'ws'
 import express from 'express'
 import compression from 'compression'
 import * as emqx from './emqx.js'
-import * as mqtt from './mqtt.js'
+import MQTT from './mqtt.js'
 
 const SECURE = process.env.SECURE === 'TRUE'
 
@@ -35,6 +35,19 @@ const server = SECURE
   }, app)
   : http.createServer(app)
 const wss = new WebSocket.Server({ server })
+
+const mqtt = MQTT([
+  'raw/7010',
+  'raw/7011',
+  'raw/7012',
+  'raw/7013',
+  'raw/7014',
+  'raw/7015',
+  'raw/7016',
+  'raw/7017',
+  'raw/7018',
+  'raw/7019',
+])
 
 mqtt.onMessage((topic, message) => {
   const channel = Number.parseInt(topic.split('/')[1])

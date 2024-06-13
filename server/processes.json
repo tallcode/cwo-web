@@ -4,7 +4,7 @@
     "instances": "2",
     "exec_mode": "cluster"
   }, {
-    "script"    : "schedule.js",
+    "script"    : "count.js",
     "instances" : "1",
     "exec_mode" : "cluster"
   }]
