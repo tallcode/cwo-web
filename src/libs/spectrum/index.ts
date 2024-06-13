@@ -1,7 +1,7 @@
 export default function (container: HTMLDivElement) {
   container.innerHTML = ''
-  const width = container.clientWidth
-  const height = container.clientHeight
+  let width = container.clientWidth
+  let height = container.clientHeight
 
   const canvas = document.createElement('canvas')
   canvas.width = width
@@ -28,6 +28,22 @@ export default function (container: HTMLDivElement) {
 
   container.appendChild(canvas)
   offscreenCtx.fillStyle = '#FF0000'
+
+  window.addEventListener('resize', () => {
+    width = container.clientWidth
+    height = container.clientHeight
+    canvas.width = width
+    canvas.height = height
+    canvas.style.width = `${width}px`
+    canvas.style.height = `${height}px`
+
+    offscreenCanvas.width = width
+    offscreenCanvas.height = height
+
+    tempCanvas.width = width
+    tempCanvas.height = height
+    offscreenCtx.fillStyle = '#FF0000'
+  })
 
   return {
     draw: (current: number, enable: number[]) => {
